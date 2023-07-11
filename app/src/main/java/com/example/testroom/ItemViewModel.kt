@@ -39,6 +39,44 @@ class ItemViewModel(private val itemDao: ItemDao): ViewModel() {
     fun retrieveItem(id: Int): LiveData<Item> {
         return itemDao.getItem(id).asLiveData()
     }
+
+    // update item with coroutines
+    private fun updateItem(item: Item) {
+        viewModelScope.launch {
+            itemDao.update(item)
+        }
+    }
+
+    // get entry
+    private fun getUpdatedItemEntry(
+        itemId: Int,
+        itemName: String
+    ): Item {
+        return Item(
+            id = itemId,
+            itemName = itemName
+        )
+    }
+
+    // to call when need to update some items
+    fun updateItem(
+        itemId: Int,
+        itemName: String
+    ) {
+        val updatedItem =
+            getUpdatedItemEntry(
+                itemId,
+                itemName
+            )
+        updateItem(updatedItem)
+    }
+
+    // to delete item
+    fun deleteItem(item: Item) {
+        viewModelScope.launch {
+            itemDao.delete(item)
+        }
+    }
 }
 
 class ItemViewModelFactory(private val itemDao: ItemDao) : ViewModelProvider.Factory {
