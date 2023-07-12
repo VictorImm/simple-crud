@@ -64,7 +64,7 @@ class ItemDetail : AppCompatActivity() {
             startActivity(intent)
 
             // finish activity
-            // finish()
+            finish()
         }
     }
 
